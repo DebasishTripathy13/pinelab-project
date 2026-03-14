@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(source:*)",
+      "Bash(__NEW_LINE_2074ad38c119ef55__ echo:*)",
+      "Bash(pkill:*)",
+      "Bash(mv logging:*)",
+      "Bash(kill 21752:*)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}

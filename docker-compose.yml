@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PINE_CLIENT_ID=${PINE_CLIENT_ID:-c1c03ab2-d04c-47cd-8483-90d27e61d53b}
+      - PINE_CLIENT_SECRET=${PINE_CLIENT_SECRET:-9cd607f65ec141e39bacf3660442fb88}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - VIRUSTOTAL_API_KEY=${VIRUSTOTAL_API_KEY}
+      - SENTINELPAY_AGENT_TOKEN=${SENTINELPAY_AGENT_TOKEN:-sp_agent_demo_token_2026}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AI_ANALYST_BACKEND=${AI_ANALYST_BACKEND:-gemini}
+      - REDIS_URL=redis://redis:6379
+      - DB_PATH=/data/sentinelpay.db
+      - IMMUTABLE_DB_PATH=/data/immutable_audit.db
+    volumes:
+      - sentinel_data:/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  sentinel_data:

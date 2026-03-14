@@ -1,0 +1,12 @@
+{
+  "skills": {
+    "pinepay": {
+      "enabled": true,
+      "env": {
+        "SENTINELPAY_URL": "http://localhost:8000",
+        "SENTINELPAY_AGENT_TOKEN": "sp_agent_demo_token_2026",
+        "PICOCLAW_AGENT_ID": "picoclaw-01"
+      }
+    }
+  }
+}

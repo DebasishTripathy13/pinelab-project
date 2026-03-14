@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LatentPay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      html,body,#root{height:100%;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;color:#0f1f16}
+
+      /* ── Design tokens ── */
+      :root{
+        --sidebar-bg:#061710;
+        --sidebar-w:228px;
+        --bg:#f0faf5;
+        --card:#ffffff;
+        --border:#e4f0e9;
+        --text-primary:#0f1f16;
+        --text-secondary:#4a7a5e;
+        --text-muted:#8fb8a0;
+        --accent:#059669;
+        --accent-light:#d1fae5;
+        --accent-mid:#6ee7b7;
+        --danger:#dc2626;
+        --danger-light:#fef2f2;
+        --warning:#d97706;
+        --warning-light:#fffbeb;
+        --info:#2563eb;
+        --info-light:#eff6ff;
+        --shadow-sm:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.03);
+        --shadow-md:0 4px 16px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.03);
+        --shadow-lg:0 12px 40px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
+      }
+
+      body{background:var(--bg)}
+
+      /* ── Scrollbar ── */
+      ::-webkit-scrollbar{width:4px;height:4px}
+      ::-webkit-scrollbar-track{background:transparent}
+      ::-webkit-scrollbar-thumb{background:rgba(5,150,105,.15);border-radius:99px}
+      ::-webkit-scrollbar-thumb:hover{background:rgba(5,150,105,.3)}
+
+      /* ── Layout ── */
+      .layout{display:flex;min-height:100vh}
+      .sidebar{
+        position:fixed;top:0;left:0;bottom:0;
+        width:var(--sidebar-w);
+        background:var(--sidebar-bg);
+        display:flex;flex-direction:column;
+        z-index:50;
+      }
+      .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;padding:28px 30px 48px;display:flex;flex-direction:column;gap:22px}
+
+      /* ── Sidebar internals ── */
+      .s-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
+      .s-logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#059669,#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 12px rgba(5,150,105,.4);flex-shrink:0}
+      .s-logo-name{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px}
+      .s-logo-sub{font-size:9px;color:rgba(255,255,255,.3);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+
+      .s-section{padding:16px 12px 6px}
+      .s-label{font-size:9px;color:rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:.1em;font-weight:600;padding:0 10px;margin-bottom:4px}
+      .s-item{
+        display:flex;align-items:center;gap:10px;
+        padding:9px 12px;border-radius:10px;
+        color:rgba(255,255,255,.45);font-size:13px;font-weight:500;
+        cursor:pointer;transition:all .18s;margin-bottom:2px;user-select:none;
+        position:relative;
+      }
+      .s-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.82)}
+      .s-item.active{background:rgba(52,211,153,.12);color:#34d399;font-weight:600}
+      .s-item.active::before{content:'';position:absolute;left:0;top:25%;bottom:25%;width:3px;background:#34d399;border-radius:0 3px 3px 0}
+      .s-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;opacity:.8}
+      .s-badge{margin-left:auto;background:#dc2626;color:#fff;font-size:9px;font-weight:700;padding:1px 7px;border-radius:99px;letter-spacing:.04em}
+      .s-divider{height:1px;background:rgba(255,255,255,.06);margin:8px 20px}
+      .s-bottom{margin-top:auto;padding:14px 12px;border-top:1px solid rgba(255,255,255,.06)}
+
+      /* ── Card ── */
+      .card{background:var(--card);border-radius:18px;box-shadow:var(--shadow-md);border:1px solid var(--border);transition:box-shadow .22s,transform .18s}
+      .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+      .p20{padding:22px 24px}
+      .p16{padding:16px 18px}
+
+      /* ── Stat tile ── */
+      .stat-tile{background:var(--card);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:all .2s;display:flex;flex-direction:column;gap:10px}
+      .stat-tile:hover{box-shadow:var(--shadow-md);transform:translateY(-1.5px)}
+      .st-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px}
+      .st-label{font-size:11px;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+      .st-val{font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--text-primary);line-height:1}
+      .st-sub{font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px}
+
+      /* ── Progress ── */
+      .bar-track{background:rgba(5,150,105,.08);border-radius:99px;height:5px;overflow:hidden}
+      .bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+      /* ── Input ── */
+      .g-input{background:#f8fdfb;border:1.5px solid var(--border);border-radius:10px;color:var(--text-primary);padding:9px 13px;font-size:13px;font-family:'Inter',sans-serif;outline:none;width:100%;transition:border-color .2s,box-shadow .2s}
+      .g-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(5,150,105,.1)}
+      .g-input::placeholder{color:var(--text-muted)}
+      .g-input::-webkit-inner-spin-button{display:none}
+
+      /* ── Buttons ── */
+      .btn{font-family:'Inter',sans-serif;cursor:pointer;transition:all .18s;font-weight:600;border:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+      .btn:active{transform:scale(.97)}
+
+      .btn-primary{background:linear-gradient(135deg,#047857,#059669);color:#fff;font-size:12px;border-radius:10px;padding:9px 16px;box-shadow:0 3px 10px rgba(5,150,105,.25)}
+      .btn-primary:hover{box-shadow:0 5px 16px rgba(5,150,105,.38);transform:translateY(-1px)}
+
+      .btn-ghost{background:rgba(5,150,105,.06);color:var(--accent);font-size:12px;border-radius:10px;padding:8px 14px;border:1.5px solid rgba(5,150,105,.12)}
+      .btn-ghost:hover{background:rgba(5,150,105,.1);border-color:rgba(5,150,105,.25)}
+
+      .btn-danger{background:linear-gradient(135deg,#b91c1c,#dc2626);color:#fff;font-size:12px;border-radius:10px;padding:9px 16px;box-shadow:0 3px 10px rgba(185,28,28,.2)}
+      .btn-danger:hover{box-shadow:0 5px 16px rgba(185,28,28,.3);transform:translateY(-1px)}
+
+      .btn-outline{background:#fff;color:var(--text-secondary);font-size:12px;border-radius:10px;padding:8px 14px;border:1.5px solid var(--border)}
+      .btn-outline:hover{border-color:rgba(5,150,105,.3);color:var(--accent);background:var(--accent-light)}
+
+      /* ── Badge ── */
+      .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid}
+
+      /* ── TX row ── */
+      .tx-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid transparent;background:transparent;transition:all .18s}
+      .tx-row:hover{background:#f8fdfb;border-color:var(--border);transform:translateX(3px)}
+
+      /* ── Avatar ── */
+      .av{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#047857;flex-shrink:0;letter-spacing:-.5px}
+
+      /* ── Label/value pairs ── */
+      .mini-card{background:#f8fdfb;border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
+
+      /* ── Separators ── */
+      .sep{height:1px;background:var(--border);margin:16px 0}
+
+      /* ── Kill button ── */
+      .kill-btn{width:100%;padding:14px;background:linear-gradient(135deg,#fff5f5,#fef2f2);border:1.5px solid rgba(220,38,38,.2);border-radius:13px;cursor:pointer;color:#b91c1c;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:'Inter',sans-serif;transition:all .22s}
+      .kill-btn:hover{border-color:#dc2626;background:linear-gradient(135deg,#fef2f2,#fee2e2);box-shadow:0 4px 20px rgba(220,38,38,.16)}
+      .kill-btn:active{transform:scale(.98)}
+
+      /* ── Audit row ── */
+      .audit-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;border:1px solid transparent;cursor:pointer;transition:all .18s}
+      .audit-row:hover{background:#f8fdfb;border-color:var(--border)}
+      .audit-row.open{background:var(--accent-light);border-color:#6ee7b7}
+
+      /* ── Insight row ── */
+      .insight-row{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border-radius:12px;border:1px solid;transition:all .18s}
+      .insight-row:hover{transform:translateX(2px)}
+
+      /* ── Ring chart ── */
+      .ring-wrap{position:relative;width:100px;height:100px}
+      .ring-wrap svg{transform:rotate(-90deg)}
+      .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+      /* ── Page title ── */
+      .page-title{font-size:20px;font-weight:800;color:var(--text-primary);letter-spacing:-.5px}
+      .page-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
+
+      /* ── Animations ── */
+      @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+      @keyframes fade{from{opacity:0}to{opacity:1}}
+      @keyframes pulse-g{0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,.4)}50%{box-shadow:0 0 0 7px rgba(5,150,105,0)}}
+      @keyframes pulse-r{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.4)}50%{box-shadow:0 0 0 7px rgba(220,38,38,0)}}
+      @keyframes pulse-a{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.4)}50%{box-shadow:0 0 0 7px rgba(217,119,6,0)}}
+      @keyframes spin{to{transform:rotate(360deg)}}
+
+      .anim-up{animation:fadeUp .3s ease-out}
+      .anim-fade{animation:fade .35s ease-out}
+      .pulse-g{animation:pulse-g 2s infinite}
+      .pulse-r{animation:pulse-r 1s infinite}
+      .pulse-a{animation:pulse-a 1.5s infinite}
+      .spin{animation:spin .8s linear infinite}
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

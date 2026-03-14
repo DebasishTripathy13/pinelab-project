@@ -1,0 +1,89 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+env/
+venv/
+.venv/
+ENV/
+pip-selfcheck.json
+
+# Environment / Secrets — NEVER commit these
+.env
+.env.local
+.env.production
+.env.staging
+*.pem
+*.key
+*.p12
+secrets/
+credentials/
+
+# Node / React
+node_modules/
+dashboard/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.pnp
+.pnp.js
+dashboard/build/
+build/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+immutable_audit.db
+/data/
+
+# ML model artifacts
+*.pkl
+*.pickle
+*.joblib
+ml/models/*.pkl
+ml/saved_models/
+
+# Docker
+.dockerignore
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.pid
+
+# Redis dump
+dump.rdb
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.pytest_cache/
+.mypy_cache/
+
+# Pine Labs / Payment credentials (extra safety)
+pine_credentials*
+pinelabs_creds*
+agent_token*
+SENTINELPAY_AGENT_TOKEN*
