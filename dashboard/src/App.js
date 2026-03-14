@@ -889,6 +889,7 @@ export default function App() {
 
   /* Page titles per tab */
   const TITLES = {
+    home:         ['Home',          'Welcome to LatentPay'],
     dashboard:    ['Dashboard',     'Welcome back \u2014 AI payment overview'],
     transactions: ['Transactions',  'Real-time feed of all payment events'],
     threats:      ['AI Threats',    'Gemini-powered threat detection and analysis'],
