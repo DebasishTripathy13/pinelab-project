@@ -217,4 +217,6 @@ Runs on a [$10 Sipeed LicheeRV-Nano](https://github.com/sipeed/picoclaw). Compil
 **Built for Pine Labs AI Hackathon — March 14, 2026**  
 Theme: *Agentic / Autonomous Commerce & Intelligent Payments*
 
+🏅 **Result:** Won **3rd Place** in the Pine Labs Playground AI Hackathon
+
 Team: DebasishTripathy13
